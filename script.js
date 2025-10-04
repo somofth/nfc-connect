@@ -1,4 +1,8 @@
-//deviceID
+//deviceID, nfc
+
+const button = document.querySelector("button");
+let result = document.querySelector("#result");
+let nfc_result = document.querySelector("#nfc_result");
 
 function getOrSetDeviceID() {
   // 1. localStorage에서 deviceID를 찾아본다.
@@ -20,13 +24,12 @@ function getOrSetDeviceID() {
 
 console.log("Device ID:", getOrSetDeviceID());
 
-const button = document.querySelector("button");
-let result = document.querySelector("#result");
 button.addEventListener("click", () => {
   // 버튼 클릭 시 deviceID를 다시 확인해본다.
   result.innerHTML = getOrSetDeviceID();
 });
 
+// NFC 읽기
 // 웹페이지가 로드되자마자 실행
 window.onload = async () => {
   // 1. URL에서 'item' 정보 꺼내기
@@ -34,7 +37,6 @@ window.onload = async () => {
   const itemId = urlParams.get("item"); // 'hairtie'
 
   if (itemId) {
-    // 2. 이 정보를 서버로 보내기
     try {
       // '/api/log-tap'이라는 주소로 데이터 전송
       const response = await fetch("/api/log-tap", {
@@ -48,16 +50,16 @@ window.onload = async () => {
 
       if (response.ok) {
         // 성공적으로 서버에 전송되면
-        document.body.innerHTML = `${itemId} 태그 접촉이 성공적으로 기록되었습니다.`;
+        nfc_result.innerHTML = `${itemId} 태그 접촉이 성공적으로 기록되었습니다.`;
       } else {
         // 서버에서 에러가 발생하면
-        document.body.innerHTML = "기록에 실패했습니다. (서버 오류)";
+        nfc_result.innerHTML = "기록에 실패했습니다. (서버 오류)";
       }
     } catch (error) {
       // 네트워크 문제 등으로 전송 자체가 실패하면
-      document.body.innerHTML = "기록에 실패했습니다. (네트워크 오류)";
+      dnfc_result.innerHTML = "기록에 실패했습니다. (네트워크 오류)";
     }
   } else {
-    document.body.innerHTML = "태그 정보가 올바르지 않습니다.";
+    nfc_result.innerHTML = "태그 정보가 올바르지 않습니다.";
   }
 };
