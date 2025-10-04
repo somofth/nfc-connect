@@ -27,6 +27,7 @@ async function getOrSetDeviceID() {
   try {
     const response = await fetch(`${backendUrl}/api/generate-id`, {
       method: "POST",
+      credentials: "include", // 쿠키를 담아서 보내라
     });
     const data = await response.json();
     deviceId = data.device_id;
@@ -56,6 +57,7 @@ window.onload = async () => {
     try {
       const response = await fetch(`${backendUrl}/api/log-tap`, {
         method: "POST",
+        credentials: "include", // 쿠키를 담아서 보내라
         headers: { "Content-Type": "application/json" },
         // 이제 body에는 item 정보만 보냄
         body: JSON.stringify({ item: itemId }),

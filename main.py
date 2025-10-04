@@ -3,6 +3,7 @@ import uuid #이름표 생성기
 from fastapi import FastAPI, Request, Response
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 
 app = FastAPI()
 
@@ -33,7 +34,7 @@ def generate_device_id(request: Request):
         device_id = str(uuid.uuid4())
 
     content = {"device_id": device_id}
-    response = Response(content=str(content), media_type="application/json")
+    response = JSONResponse(content=content) #JSONResponse사용해서 제대로 변환
     
     response.set_cookie(key="device_id", value=device_id, max_age=31536000, samesite='none', secure=True)
     
