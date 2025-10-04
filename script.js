@@ -1,5 +1,4 @@
 //deviceID, nfc
-
 const button = document.querySelector("button");
 let result = document.querySelector("#result");
 let nfc_result = document.querySelector("#nfc_result");
@@ -35,31 +34,33 @@ window.onload = async () => {
   // 1. URL에서 'item' 정보 꺼내기
   const urlParams = new URLSearchParams(window.location.search);
   const itemId = urlParams.get("item"); // 'hairtie'
+  const deviceId = getOrSetDeviceID();
 
   if (itemId) {
     try {
       // '/api/log-tap'이라는 주소로 데이터 전송
-      const response = await fetch("/api/log-tap", {
+      const response = await fetch(" http://127.0.0.1:8000/items", {
         method: "POST", // 데이터를 생성/기록할 때는 보통 POST 방식을 사용
         headers: {
           "Content-Type": "application/json",
         },
-        // 어떤 아이템이 찍혔는지 JSON 형태로 만들어서 전송
-        body: JSON.stringify({ item: itemId }),
+        // 어떤 아이템과 디바이스 아이디가 찍혔는지 JSON 형태로 만들어서 전송
+        body: JSON.stringify({ item: itemId, device: deviceId }),
       });
 
       if (response.ok) {
         // 성공적으로 서버에 전송되면
-        nfc_result.innerHTML = `${itemId} 태그 접촉이 성공적으로 기록되었습니다.`;
+        nfc_result.innerHTML = `${deviceId} 기기에서의 ${itemId} 태그 접촉이 성공적으로 기록되었습니다.`;
       } else {
         // 서버에서 에러가 발생하면
-        nfc_result.innerHTML = "기록에 실패했습니다. (서버 오류)";
+        nfc_result.innerHTML = "기록에 실패했습니다. (서버 오류)"; //서버 켜고 해보니까 이게 뜬다
       }
     } catch (error) {
       // 네트워크 문제 등으로 전송 자체가 실패하면
-      dnfc_result.innerHTML = "기록에 실패했습니다. (네트워크 오류)";
+      nfc_result.innerHTML = "기록에 실패했습니다. (네트워크 오류)"; //쿼리 추가하니까 이게 뜬다
+      console.log(itemId);
     }
   } else {
-    nfc_result.innerHTML = "태그 정보가 올바르지 않습니다.";
+    nfc_result.innerHTML = "태그 정보가 올바르지 않습니다."; //아까는 이거였는데
   }
 };
