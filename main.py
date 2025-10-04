@@ -19,6 +19,11 @@ app.add_middleware(
 )
 # ======================
 
+
+@app.get("/")
+def greet():
+    return {"message": "hello world! go /items"}
+
 class TapData(BaseModel):
     item: str
     device: str
@@ -27,3 +32,4 @@ class TapData(BaseModel):
 def log_tap_endpoint(data: TapData):
     print(f"접근 감지")
     return {"message": f"[서버 기록] 기기 ID: {data.device} / 아이템 ID: {data.item}"}
+

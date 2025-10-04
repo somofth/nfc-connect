@@ -1,0 +1,88 @@
+/* Google Fonts에서 Noto Sans KR 폰트 가져오기 */
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap");
+
+/* 색상이나 폰트 등 공통 스타일을 변수로 관리하면 편리함 */
+:root {
+  --primary-color: #007bff; /* 주요 색상 (파란색 계열) */
+  --primary-hover-color: #0056b3; /* 마우스 올렸을 때 색상 */
+  --background-color: #f8f9fa; /* 페이지 배경색 */
+  --text-color: #343a40; /* 기본 글자색 */
+  --container-bg-color: #ffffff; /* 콘텐츠 영역 배경색 */
+  --border-color: #dee2e6; /* 테두리 색상 */
+}
+
+/* 기본 스타일 초기화 및 전체 폰트, 배경색 설정 */
+body,
+html {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Noto Sans KR", sans-serif;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  display: flex; /* 콘텐츠를 중앙 정렬하기 위한 Flexbox */
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh; /* 화면 전체 높이를 차지하도록 설정 */
+  text-align: center;
+}
+
+/* 모든 콘텐츠를 감싸는 컨테이너 */
+.container {
+  background-color: var(--container-bg-color);
+  padding: 2rem 3rem;
+  border-radius: 12px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  width: 90%;
+  max-width: 500px;
+}
+
+/* 제목 (h2) 스타일 */
+h2 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--text-color);
+  margin-bottom: 2rem;
+}
+
+/* 버튼 (#btn) 스타일 */
+#btn {
+  background-color: var(--primary-color);
+  color: white;
+  font-size: 1rem;
+  font-weight: 500;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+  margin-bottom: 1.5rem;
+}
+
+/* 버튼에 마우스를 올렸을 때 효과 */
+#btn:hover {
+  background-color: var(--primary-hover-color);
+  transform: translateY(-2px); /* 살짝 위로 떠오르는 효과 */
+}
+
+/* 결과가 표시될 영역 (#result, #nfc_result) 스타일 */
+#result,
+#nfc_result {
+  background-color: #f1f3f5;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-top: 1rem;
+  min-height: 2.5em; /* 내용이 없어도 최소 높이 유지 */
+  line-height: 1.5;
+  color: #495057;
+  font-family: "SF Mono", "Consolas", monospace; /* ID 값은 고정폭 글꼴로 표시 */
+  word-wrap: break-word; /* 긴 ID가 영역을 넘어가지 않도록 자동 줄바꿈 */
+}
+
+/* 구분선 (hr) 스타일 */
+hr {
+  border: none;
+  height: 1px;
+  background-color: var(--border-color);
+  margin: 2rem 0;
+}
