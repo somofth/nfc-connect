@@ -3,39 +3,24 @@ const button = document.querySelector("button");
 let result = document.querySelector("#result");
 let nfc_result = document.querySelector("#nfc_result");
 const backendUrl = "https://targetless-ciara-gripiest.ngrok-free.dev"; // ngrok 주소를 변수로 관리하면 편해
-
-// 쿠키에서 특정 이름의 값을 가져오는 도우미 함수
-function getCookie(name) {
-  const value = `; ${document.cookie}`;
-  const parts = value.split(`; ${name}=`);
-  if (parts.length === 2) return parts.pop().split(";").shift();
-}
-
-// 서버와 통신하여 deviceID를 가져오거나 생성하는 비동기 함수
+// deviceID 발급/확인 함수 (수정됨)
 async function getOrSetDeviceID() {
-  // 1. 먼저 브라우저에 쿠키가 있는지 확인
-  let deviceId = getCookie("device_id");
-
-  // 2. 쿠키가 있다면 바로 반환
-  if (deviceId) {
-    console.log("Cookie에서 deviceID 찾음:", deviceId);
-    return deviceId;
-  } else {
-    // 3. 쿠키가 없다면 서버에 ID 발급 요청
-    console.log("쿠키 없음, 서버에 ID 발급 요청...");
-  }
-
+  console.log("서버에 deviceID 확인 및 발급을 요청합니다...");
   try {
+    // 그냥 무조건 서버에 요청을 보내! 쿠키가 있든 없든 서버가 알아서 판단할 거야.
     const response = await fetch(`${backendUrl}/api/generate-id`, {
       method: "POST",
-      credentials: "include", // 쿠키를 담아서 보내라
+      credentials: "include", // 쿠키가 있다면 브라우저가 알아서 보내줌
+      headers: {
+        "ngrok-skip-browser-warning": "true",
+      },
     });
     const data = await response.json();
-    deviceId = data.device_id;
-    console.log("서버로부터 새 deviceID 발급받음:", deviceId);
+    const deviceId = data.device_id;
+    console.log("서버로부터 최종 deviceID를 받음:", deviceId);
     return deviceId;
   } catch (error) {
-    console.error("ID 발급 중 에러:", error);
+    console.error("ID 발급/확인 중 에러:", error);
     return null;
   }
 }
