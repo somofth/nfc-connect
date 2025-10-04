@@ -53,7 +53,7 @@ window.onload = async () => {
 
       if (response.ok) {
         // 성공적으로 서버에 전송되면
-        nfc_result.innerHTML = `${deviceId} 기기에서의 ${itemId} 태그 접촉이 성공적으로 기록되었습니다.`;
+        nfc_result.innerHTML = `${deviceId} 브라우저에서의 ${itemId} 태그 접촉이 성공적으로 기록되었습니다.`;
       } else {
         // 서버에서 에러가 발생하면
         nfc_result.innerHTML = "기록에 실패했습니다. (서버 오류)"; //서버 켜고 해보니까 이게 뜬다
