@@ -20,10 +20,11 @@ async function getOrSetDeviceID() {
   if (deviceId) {
     console.log("Cookie에서 deviceID 찾음:", deviceId);
     return deviceId;
+  } else {
+    // 3. 쿠키가 없다면 서버에 ID 발급 요청
+    console.log("쿠키 없음, 서버에 ID 발급 요청...");
   }
 
-  // 3. 쿠키가 없다면 서버에 ID 발급 요청
-  console.log("쿠키 없음, 서버에 ID 발급 요청...");
   try {
     const response = await fetch(`${backendUrl}/api/generate-id`, {
       method: "POST",

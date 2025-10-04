@@ -36,7 +36,7 @@ def generate_device_id(request: Request):
     content = {"device_id": device_id}
     response = JSONResponse(content=content) #JSONResponse사용해서 제대로 변환
     
-    response.set_cookie(key="device_id", value=device_id, max_age=31536000, samesite='none', secure=True)
+    response.set_cookie(key="device_id", value=device_id, max_age=31536000, samesite='none', secure=True, httponly=False)
     
     return response
 
