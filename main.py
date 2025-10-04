@@ -1,7 +1,8 @@
 # main.py
-from fastapi import FastAPI
+import uuid #이름표 생성기
+from fastapi import FastAPI, Request, Response
 from pydantic import BaseModel
-from fastapi.middleware.cors import CORSMiddleware # CORS 미들웨어 가져오기
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
@@ -24,12 +25,29 @@ app.add_middleware(
 def greet():
     return {"message": "hello world! go /items"}
 
+@app.post("/api/generate-id") #deviceId 생성해서 유저 주머니에 넣어주기
+def generate_device_id(request: Request):
+    device_id = request.cookies.get("device_id")
+    
+    if not device_id:
+        device_id = str(uuid.uuid4())
+
+    content = {"device_id": device_id}
+    response = Response(content=str(content), media_type="application/json")
+    
+    response.set_cookie(key="device_id", value=device_id, max_age=31536000, samesite='none', secure=True)
+    
+    return response
+
 class TapData(BaseModel):
     item: str
-    device: str
 
-@app.post("/items")
-def log_tap_endpoint(data: TapData):
-    print(f"접근 감지")
-    return {"message": f"[서버 기록] 기기 ID: {data.device} / 아이템 ID: {data.item}"}
+@app.post("/log-tap") #deviceId 읽기
+def log_tap_endpoint(data: TapData, request: Request):
+    device_id = request.cookies.get("device_id")
 
+    if not device_id:
+        return {"message": "기기 ID가 없습니다. ..."}
+        
+    print(f"[서버 기록] ...")
+    return {"message": "기록 성공!"}

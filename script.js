@@ -1,69 +1,76 @@
-//deviceID, nfc
+// script.js
 const button = document.querySelector("button");
 let result = document.querySelector("#result");
 let nfc_result = document.querySelector("#nfc_result");
+const backendUrl = "https://targetless-ciara-gripiest.ngrok-free.dev"; // ngrok 주소를 변수로 관리하면 편해
 
-function getOrSetDeviceID() {
-  // 1. localStorage에서 deviceID를 찾아본다.
-  let deviceId = localStorage.getItem("deviceID");
-
-  // 2. 만약 deviceID가 없다면 (최초 방문자라면)
-  if (!deviceId) {
-    // 3. 새로운 고유 ID를 생성한다. (요즘 브라우저는 이 기능을 기본 지원!)
-    deviceId = crypto.randomUUID();
-    // 4. 생성한 ID를 localStorage에 저장한다.
-    localStorage.setItem("deviceID", deviceId);
-  } else {
-    console.log("deviceID exists:", deviceId);
-  }
-
-  // 5. 저장되어 있거나 새로 만든 ID를 반환한다.
-  return deviceId;
+// 쿠키에서 특정 이름의 값을 가져오는 도우미 함수
+function getCookie(name) {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(";").shift();
 }
 
-console.log("Device ID:", getOrSetDeviceID());
+// 서버와 통신하여 deviceID를 가져오거나 생성하는 비동기 함수
+async function getOrSetDeviceID() {
+  // 1. 먼저 브라우저에 쿠키가 있는지 확인
+  let deviceId = getCookie("device_id");
 
-button.addEventListener("click", () => {
-  // 버튼 클릭 시 deviceID를 다시 확인해본다.
-  result.innerHTML = getOrSetDeviceID();
+  // 2. 쿠키가 있다면 바로 반환
+  if (deviceId) {
+    console.log("Cookie에서 deviceID 찾음:", deviceId);
+    return deviceId;
+  }
+
+  // 3. 쿠키가 없다면 서버에 ID 발급 요청
+  console.log("쿠키 없음, 서버에 ID 발급 요청...");
+  try {
+    const response = await fetch(`${backendUrl}/api/generate-id`, {
+      method: "POST",
+    });
+    const data = await response.json();
+    deviceId = data.device_id;
+    console.log("서버로부터 새 deviceID 발급받음:", deviceId);
+    return deviceId;
+  } catch (error) {
+    console.error("ID 발급 중 에러:", error);
+    return null;
+  }
+}
+
+button.addEventListener("click", async () => {
+  result.innerHTML = "ID 확인 중...";
+  const deviceId = await getOrSetDeviceID();
+  result.innerHTML = `현재 기기 ID: ${deviceId}`;
 });
 
-// NFC 읽기
-// 웹페이지가 로드되자마자 실행
+// NFC 읽기 (수정됨)
 window.onload = async () => {
-  // 1. URL에서 'item' 정보 꺼내기
   const urlParams = new URLSearchParams(window.location.search);
-  const itemId = urlParams.get("item"); // 'hairtie'
-  const deviceId = getOrSetDeviceID();
+  const itemId = urlParams.get("item");
 
-  if (itemId) {
+  // 비동기 함수이므로 await로 기다려야 함
+  const deviceId = await getOrSetDeviceID();
+
+  if (itemId && deviceId) {
     try {
-      // '/api/log-tap'이라는 주소로 데이터 전송
-      const response = await fetch(
-        "https://targetless-ciara-gripiest.ngrok-free.dev/items",
-        {
-          method: "POST", // 데이터를 생성/기록할 때는 보통 POST 방식을 사용
-          headers: {
-            "Content-Type": "application/json",
-          },
-          // 어떤 아이템과 디바이스 아이디가 찍혔는지 JSON 형태로 만들어서 전송
-          body: JSON.stringify({ item: itemId, device: deviceId }),
-        }
-      );
+      const response = await fetch(`${backendUrl}/api/log-tap`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        // 이제 body에는 item 정보만 보냄
+        body: JSON.stringify({ item: itemId }),
+      });
 
       if (response.ok) {
-        // 성공적으로 서버에 전송되면
-        nfc_result.innerHTML = `${deviceId} 브라우저에서의 ${itemId} 태그 접촉이 성공적으로 기록되었습니다.`;
+        nfc_result.innerHTML = `${deviceId} 기기에서 ${itemId} 태그 접촉 기록 성공!`;
       } else {
-        // 서버에서 에러가 발생하면
-        nfc_result.innerHTML = "기록에 실패했습니다. (서버 오류)"; //서버 켜고 해보니까 이게 뜬다
+        nfc_result.innerHTML = `기록 실패 (서버 오류: ${response.status})`;
       }
     } catch (error) {
-      // 네트워크 문제 등으로 전송 자체가 실패하면
-      nfc_result.innerHTML = "기록에 실패했습니다. (네트워크 오류)"; //쿼리 추가하니까 이게 뜬다
-      console.log(itemId);
+      console.error("Fetch 에러:", error);
+      nfc_result.innerHTML = "기록 실패 (네트워크 오류)";
     }
   } else {
-    nfc_result.innerHTML = "태그 정보가 올바르지 않습니다."; //아까는 이거였는데
+    nfc_result.innerHTML = "태그 또는 기기 정보가 올바르지 않습니다.";
   }
 };
