@@ -40,7 +40,7 @@ window.onload = async () => {
     try {
       // '/api/log-tap'이라는 주소로 데이터 전송
       const response = await fetch(
-        "https://targetless-ciara-gripiest.ngrok-free.dev/api/items",
+        "https://targetless-ciara-gripiest.ngrok-free.dev/items",
         {
           method: "POST", // 데이터를 생성/기록할 때는 보통 POST 방식을 사용
           headers: {
