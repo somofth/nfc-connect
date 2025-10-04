@@ -44,7 +44,7 @@ def generate_device_id(request: Request):
 class TapData(BaseModel):
     item: str
 
-@app.post("/log-tap") #deviceId 읽기
+@app.post("/api/log-tap") #deviceId 읽기
 def log_tap_endpoint(data: TapData, request: Request):
     device_id = request.cookies.get("device_id")
 

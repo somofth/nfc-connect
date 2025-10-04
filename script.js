@@ -52,7 +52,7 @@ window.onload = async () => {
       if (response.ok) {
         nfc_result.innerHTML = `${deviceId} 기기에서 ${itemId} 태그 접촉 기록 성공!`;
       } else {
-        nfc_result.innerHTML = `기록 실패 (서버 오류: ${response.status})`;
+        nfc_result.innerHTML = `기록 실패 (오류코드: ${response.status})`;
       }
     } catch (error) {
       console.error("Fetch 에러:", error);
