@@ -39,14 +39,17 @@ window.onload = async () => {
   if (itemId) {
     try {
       // '/api/log-tap'이라는 주소로 데이터 전송
-      const response = await fetch(" http://127.0.0.1:8000/items", {
-        method: "POST", // 데이터를 생성/기록할 때는 보통 POST 방식을 사용
-        headers: {
-          "Content-Type": "application/json",
-        },
-        // 어떤 아이템과 디바이스 아이디가 찍혔는지 JSON 형태로 만들어서 전송
-        body: JSON.stringify({ item: itemId, device: deviceId }),
-      });
+      const response = await fetch(
+        "https://targetless-ciara-gripiest.ngrok-free.dev/api/items",
+        {
+          method: "POST", // 데이터를 생성/기록할 때는 보통 POST 방식을 사용
+          headers: {
+            "Content-Type": "application/json",
+          },
+          // 어떤 아이템과 디바이스 아이디가 찍혔는지 JSON 형태로 만들어서 전송
+          body: JSON.stringify({ item: itemId, device: deviceId }),
+        }
+      );
 
       if (response.ok) {
         // 성공적으로 서버에 전송되면
