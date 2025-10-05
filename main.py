@@ -32,7 +32,7 @@ def generate_device_id(request: Request):
     
     if not device_id:
         device_id = str(uuid.uuid4())
-        print("device_id가 없어서 새로 만듦")
+        print(f"device_id가 없어서 새로 만듦, {device_id}")
     else: print(f"이미 존재하는 device_id,{device_id}")
 
     content = {"device_id": device_id}
