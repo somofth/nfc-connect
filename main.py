@@ -32,7 +32,8 @@ def generate_device_id(request: Request):
     
     if not device_id:
         device_id = str(uuid.uuid4())
-        print("device_id가 없으니까 새로 만든다")
+        print("device_id가 없어서 새로 만듦")
+    else: print(f"이미 존재하는 device_id,{device_id}")
 
     content = {"device_id": device_id}
     response = JSONResponse(content=content) #JSONResponse사용해서 제대로 변환
