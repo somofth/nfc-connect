@@ -23,7 +23,3 @@ window.onload = () => {
     nfc_result.innerHTML = "NFC 태그를 통해 접속해주세요.";
   }
 };
-
-// ID를 가져오는 버튼이나 다른 복잡한 함수들은 이제 필요 없음
-// const button = ...
-// function getOrSetDeviceID() { ... } 등등 모두 삭제

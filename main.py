@@ -6,8 +6,11 @@ from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
-# --- CORS 설정 ---
-origins = ["*"]
+# === CORS 설정 수정: almang.shop 도메인만 서버 입장 가능 ===
+origins = [
+    "https://almang.shop",
+    "https://www.almang.shop"
+]
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
@@ -16,7 +19,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# --- 여기가 새로운 핵심! NFC 태그를 찍으면 가장 먼저 도착하는 곳 ---
+# --- NFC 태그를 찍으면 가장 먼저 서버로 입장 ---
 @app.get("/tap")
 def handle_nfc_tap(item: str, request: Request):
     # 1. 요청에 쿠키가 있는지 확인
@@ -30,8 +33,8 @@ def handle_nfc_tap(item: str, request: Request):
     print(f"[서버 기록 /tap] 기기 ID: {device_id} / 아이템 ID: {item}")
     
     # 4. 이제 프론트엔드 페이지로 사용자를 보낼 준비
-    # 최종 목적지인 깃허브 페이지 주소
-    redirect_url = f"https://somofth.github.io/nfc-connect/?item={item}&deviceId_from_server={device_id}"
+    # 최종 목적지인 almang.shop (vercel)
+    redirect_url = f"https://almang.shop/?item={item}&deviceId_from_server={device_id}"
     response = RedirectResponse(url=redirect_url)
 
     # 5. 떠나는 사용자에게 쿠키를 찍어줌
