@@ -2,8 +2,7 @@
 const button = document.querySelector("button");
 let result = document.querySelector("#result");
 let nfc_result = document.querySelector("#nfc_result");
-const backendUrl = "https://targetless-ciara-gripiest.ngrok-free.dev"; // ngrok 주소를 변수로 관리하면 편해
-// deviceID 발급/확인 함수 (수정됨)
+const backendUrl = "https://api.almang.shop";
 async function getOrSetDeviceID() {
   console.log("서버에 deviceID 확인 및 발급을 요청합니다...");
   try {

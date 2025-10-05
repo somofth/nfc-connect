@@ -24,7 +24,7 @@ app.add_middleware(
 
 @app.get("/")
 def greet():
-    return {"message": "hello world! go /items"}
+    return {"message": "hello world! api list: generate-id / log-tap"}
 
 @app.post("/api/generate-id") #deviceId 생성해서 유저 주머니에 넣어주기
 def generate_device_id(request: Request):
