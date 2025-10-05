@@ -4,8 +4,5 @@
       "source": "/api/:path*",
       "destination": "https://api.almang.shop/:path*"
     }
-  ],
-  "functions": {
-    "api/**/*.py": {}
-  }
+  ]
 }
