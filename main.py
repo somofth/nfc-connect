@@ -52,5 +52,5 @@ def log_tap_endpoint(data: TapData, request: Request):
     if not device_id:
         return {"message": "기기 ID가 없습니다. ..."}
         
-    print(f"[서버 기록] ...")
+    print(f"[서버 기록] {device_id}에서 {data.item}과 접촉")
     return {"message": "기록 성공!"}
